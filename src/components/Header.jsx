@@ -8,7 +8,7 @@ const Header = () => {
         <div className="w-14 sm:w-24 md:w-28">
           <img src={logo} className="w-full h-auto animate-spinCustom" />
         </div>
-        <p className="text-white text-lg sm:text-xl tracking-custom_xs sm:tracking-md">
+        <p className="text-white text-lg sm:text-xl tracking-custom_xs sm:tracking-md ">
           REACT QUIZ
         </p>
       </div>

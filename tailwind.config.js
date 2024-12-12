@@ -14,12 +14,12 @@ export default {
         },
       },
       animation: {
-        spinCustom: "rotateCustom 3s linear infinite", // Animasi rotasi
+        spinCustom: "rotateCustom 6s linear infinite", // Animasi rotasi
         pulseCustom: "pulseCustom 2s ease-in-out infinite", // Animasi pulsasi
       },
       letterSpacing: {
         custom_md: "12px",
-        custom_xs: "8px",
+        custom_xs: "6px",
       },
     },
   },
