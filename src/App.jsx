@@ -7,6 +7,8 @@ import Main from "./components/Main";
 import Loader from "./components/Loader";
 import Error from "./components/Error";
 import StartScreen from "./components/StartScreen";
+import EachQuestion from "./components/EachQuestion";
+import Progress from "./components/Progress";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -14,7 +16,20 @@ const reducer = (state, action) => {
       return { ...state, questions: action.payload, status: "ready" };
     case "DATA_FAILED":
       return { ...state, status: "error" };
-
+    case "DATA_ACTIVE":
+      return { ...state, status: "active" };
+    case "NEW_ANSWER":
+      const currentQuestion = state.questions.at(state.index);
+      return {
+        ...state,
+        answer: action.payload,
+        points:
+          action.payload === currentQuestion.correctOption
+            ? state.points + currentQuestion.points
+            : state.points,
+      };
+    case "NEXT_QUESTION":
+      return { ...state, index: state.index + 1, answer: null };
     default:
       throw new Error("UNKNOWN ACTION TYPE");
   }
@@ -24,13 +39,21 @@ const initialState = {
   questions: [],
   //"loading","error","ready","active","finished"
   status: "loading",
+  index: 0,
+  answer: null,
+  points: 0,
 };
 
 function App() {
-  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
-  console.log(questions);
-
-  // console.log(state);
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
+  const numQuestions = questions.length;
+  const maxPoints = questions.reduce(
+    (prev, current) => prev + current.points,
+    0
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,7 +78,26 @@ function App() {
         <Main>
           {status === "loading" && <Loader />}
           {status === "error" && <Error />}
-          {status === "ready" && <StartScreen numQues={questions.length} />}
+          {status === "ready" && (
+            <StartScreen numQues={numQuestions} dispatch={dispatch} />
+          )}
+          {status === "active" && (
+            <>
+              <Progress
+                index={index}
+                numQues={numQuestions}
+                maxPoints={maxPoints}
+                answer={answer}
+                points={points}
+              />
+              <EachQuestion
+                questionObj={questions[index]}
+                index={index}
+                dispatch={dispatch}
+                answer={answer}
+              />
+            </>
+          )}
         </Main>
       </div>
     </>

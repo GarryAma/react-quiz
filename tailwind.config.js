@@ -21,6 +21,9 @@ export default {
         custom_md: "12px",
         custom_xs: "6px",
       },
+      scale: {
+        97: "0.97",
+      },
     },
   },
   plugins: [],

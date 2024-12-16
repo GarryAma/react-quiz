@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+progress::-webkit-progress-bar {
+  @apply bg-white rounded-lg; /* Track */
+}
+
+progress::-webkit-progress-value {
+  @apply bg-green-400 rounded-lg; /* Bar */
+}
+
+progress::-moz-progress-bar {
+  @apply bg-red-500; /* Firefox */
+}
