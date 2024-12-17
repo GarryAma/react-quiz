@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const EachQuestion = ({ questionObj, index, dispatch, answer }) => {
+const EachQuestion = ({ questionObj, index, dispatch, answer, questions }) => {
   const { question, options, correctOption } = questionObj;
 
   console.log(answer);
@@ -39,9 +39,15 @@ const EachQuestion = ({ questionObj, index, dispatch, answer }) => {
           {answer === null ? null : (
             <button
               className="border border-white outline-none rounded-full py-2 px-4 hover:bg-slate-800 duration-150 hover:scale-97 hover:outline-none"
-              onClick={() => dispatch({ type: "NEXT_QUESTION" })}
+              onClick={() => {
+                if (index < questions.length - 1) {
+                  dispatch({ type: "NEXT_QUESTION" });
+                } else {
+                  dispatch({ type: "FINISH" });
+                }
+              }}
             >
-              Next question →
+              {index < questions.length - 1 ? "Next question →" : "finish"}
             </button>
           )}
         </div>

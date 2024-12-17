@@ -12,10 +12,21 @@ export default {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.2)" },
         },
+        bounceCustom: {
+          "0%, 100%": {
+            transform: "translateY(-10%)",
+            animationTimingFunction: "cubic-bezier(0.8, 0, 1, 1)",
+          },
+          "50%": {
+            transform: "translateY(0)",
+            animationTimingFunction: "cubic-bezier(0, 0, 0.2, 1)",
+          },
+        },
       },
       animation: {
         spinCustom: "rotateCustom 6s linear infinite", // Animasi rotasi
         pulseCustom: "pulseCustom 2s ease-in-out infinite", // Animasi pulsasi
+        bounceCustom: "bounceCustom 0.7s infinite ",
       },
       letterSpacing: {
         custom_md: "12px",

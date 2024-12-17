@@ -9,6 +9,16 @@ import Error from "./components/Error";
 import StartScreen from "./components/StartScreen";
 import EachQuestion from "./components/EachQuestion";
 import Progress from "./components/Progress";
+import FinishScreen from "./components/FinishScreen";
+
+const initialState = {
+  questions: [],
+  //"loading","error","ready","active","finished"
+  status: "loading",
+  index: 0,
+  answer: null,
+  points: 0,
+};
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -30,18 +40,14 @@ const reducer = (state, action) => {
       };
     case "NEXT_QUESTION":
       return { ...state, index: state.index + 1, answer: null };
+    case "FINISH":
+      return { ...state, status: "finish" };
+
+    case "RESTART":
+      return { ...state, questions: state.questions, status: "ready" };
     default:
       throw new Error("UNKNOWN ACTION TYPE");
   }
-};
-
-const initialState = {
-  questions: [],
-  //"loading","error","ready","active","finished"
-  status: "loading",
-  index: 0,
-  answer: null,
-  points: 0,
 };
 
 function App() {
@@ -92,11 +98,19 @@ function App() {
               />
               <EachQuestion
                 questionObj={questions[index]}
+                questions={questions}
                 index={index}
                 dispatch={dispatch}
                 answer={answer}
               />
             </>
+          )}
+          {status === "finish" && (
+            <FinishScreen
+              points={points}
+              maxPoints={maxPoints}
+              dispatch={dispatch}
+            />
           )}
         </Main>
       </div>
