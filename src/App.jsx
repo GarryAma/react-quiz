@@ -18,7 +18,10 @@ const initialState = {
   index: 0,
   answer: null,
   points: 0,
+  secondsRemaining: null,
 };
+
+const SECONDS_PER_QUESTIONS = 15;
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -27,7 +30,11 @@ const reducer = (state, action) => {
     case "DATA_FAILED":
       return { ...state, status: "error" };
     case "DATA_ACTIVE":
-      return { ...state, status: "active" };
+      return {
+        ...state,
+        status: "active",
+        secondsRemaining: state.questions.length * SECONDS_PER_QUESTIONS,
+      };
     case "NEW_ANSWER":
       const currentQuestion = state.questions.at(state.index);
       return {
@@ -42,19 +49,24 @@ const reducer = (state, action) => {
       return { ...state, index: state.index + 1, answer: null };
     case "FINISH":
       return { ...state, status: "finish" };
-
     case "RESTART":
-      return { ...state, questions: state.questions, status: "ready" };
+      return { ...initialState, questions: state.questions, status: "ready" };
+    case "TICK":
+      return {
+        ...state,
+        secondsRemaining: state.secondsRemaining - 1,
+        status: state.secondsRemaining === 0 ? "finish" : "active",
+      };
     default:
       throw new Error("UNKNOWN ACTION TYPE");
   }
 };
 
 function App() {
-  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [
+    { questions, status, index, answer, points, secondsRemaining },
+    dispatch,
+  ] = useReducer(reducer, initialState);
   const numQuestions = questions.length;
   const maxPoints = questions.reduce(
     (prev, current) => prev + current.points,
@@ -102,6 +114,7 @@ function App() {
                 index={index}
                 dispatch={dispatch}
                 answer={answer}
+                secondsRemaining={secondsRemaining}
               />
             </>
           )}

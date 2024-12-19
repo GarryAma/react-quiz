@@ -1,9 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const EachQuestion = ({ questionObj, index, dispatch, answer, questions }) => {
+const EachQuestion = ({
+  questionObj,
+  index,
+  dispatch,
+  answer,
+  questions,
+  secondsRemaining,
+}) => {
   const { question, options, correctOption } = questionObj;
 
-  console.log(answer);
+  const mins = Math.floor(secondsRemaining / 60);
+  const seconds = secondsRemaining % 60;
+
+  useEffect(() => {
+    const id = setInterval(() => dispatch({ type: "TICK" }), 1000);
+
+    return () => {
+      clearInterval(id);
+    };
+  }, [dispatch]);
+
   return (
     <div className="w-[80%] m-auto">
       <div className="w-[100%] md:w-[80%] flex flex-col items-center m-auto">
@@ -34,7 +51,9 @@ const EachQuestion = ({ questionObj, index, dispatch, answer, questions }) => {
 
         <div className="flex justify-between w-[90%] text-xs md:text-md">
           <div className="border border-white outline-none rounded-full py-2 px-4">
-            TIMER
+            {mins < 10 ? 0 : ""}
+            {mins}:{seconds < 10 && 0}
+            {seconds}
           </div>
           {answer === null ? null : (
             <button
